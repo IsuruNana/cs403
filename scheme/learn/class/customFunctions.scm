@@ -96,7 +96,7 @@
   (if (null? L)
     L
     (if (f (car L))
-      (reject (cdr L))
+      (reject f (cdr L))
       (cons (car L) (reject f (cdr L)))
     )
   )
