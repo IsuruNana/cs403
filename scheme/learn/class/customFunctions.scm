@@ -106,7 +106,7 @@
 (define (foldL f id L)
   (if (null? L) 
     id
-    (foldL f (f id (carL) (cdr L)))
+    (foldL f (f id (carL)) (cdr L))
   )
 )
 
