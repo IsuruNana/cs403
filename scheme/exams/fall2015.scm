@@ -6,15 +6,48 @@
 ; Example: (sum_of_products '((1 2 3 4) (5 6 7) (8 9))) returns 306, because 1*2*3*4 + 5*6*7
 ; + 8*9 = 24 + 210 + 72 = 306.
 
+(define (multiply L)
+  (if (null? L)
+    1
+    (*
+      (car L)
+      (multiply (cdr L))
+    )
+  )
+)
+
+(define (sum_of_products L)
+  (if (null? L)
+    0
+    (+
+      (multiply (car L))
+      (sum_of_products (cdr L))
+    )
+  )
+)
 
 ; 3. Write a Scheme function sum_of_products using map, foldr, and/or foldl. Do not use any
 ; explicit recursion. Example: (sum_of_products '((1 2 3 4) (5 6 7) (8 9))) returns 306,
 ; because 1*2*3*4 + 5*6*7 + 8*9 = 24 + 210 + 72 = 306.
 
+(define (product L)
+  (foldr * 1 L)
+)
+
+(define (sum_of_products L)
+  (foldr + 0 (map product L))
+)
+
 ; 4. Write a Scheme function (scan op id L) where op is an associative and commutative binary
 ; function, id is the identity value, and L is a list. It should return a list of the values obtained
 ; by folding op across each possible prefix of L. Example:
 ; (scan + 0 '(2 3 5 7 11)) returns (0 2 2+3 2+3+5 2+3+5+7 2+3+5+7+11) = (0 2 5 10 17 28).
+
+(define (scan op id L)
+  (
+
+  )
+)
 
 ; 5. Parentheses are important! Using the provided Scheme function definitions, evaluate each
 ; of the Scheme expressions shown below. Match up the parentheses carefully!
@@ -22,6 +55,25 @@
 ; (define (square x) (* x x))
 ; (define (inc x) (+ x 1))
 ; a. (((lambda (f) ((lambda (g) (lambda (h) (f (g (h 4))))) double)) square) inc)
+
+(
+  (
+    (lambda (f)
+      (
+        (lambda (g)
+          (lambda (h)
+            (f
+              (g (h 4))
+            )
+          )
+        )
+      )
+      square
+    )
+  )
+  inc
+)
+
 ; b. (((lambda (f) (lambda (g) ((lambda (h) (f (g (h 4)))) double))) square) inc)
 ; c. ((((lambda (f) (lambda (g) (lambda (h) (f (g (h 4)))))) double) square) inc)
 ; d. ((lambda (f) ((lambda (g) ((lambda (h) (f (g (h 4)))) double)) square)) inc)
