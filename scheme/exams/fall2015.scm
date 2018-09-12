@@ -44,8 +44,12 @@
 ; (scan + 0 '(2 3 5 7 11)) returns (0 2 2+3 2+3+5 2+3+5+7 2+3+5+7+11) = (0 2 5 10 17 28).
 
 (define (scan op id L)
-  (
-
+  (if (null? L)
+    (list id)
+    (cons
+      id
+      (scan op (op id (car L)) (cdr L))
+    )
   )
 )
 
@@ -66,10 +70,11 @@
               (g (h 4))
             )
           )
+          double
         )
       )
-      square
     )
+    square
   )
   inc
 )
@@ -85,8 +90,8 @@
 
 ;;---------------------------------------------------------------------
 ; (define a 10)                                                     ---
-; (let ((a 20) (b (* a a))) (+ b 1)) ; returns 102 + 1 = 101        ---
-; (let* ((a 20) (b (* a a))) (+ b 1)) ; returns 202 + 1 = 401       ---
+; (let ((a 20) (b (* a a))) (+ b 1)) ; returns 10^2 + 1 = 101        ---
+; (let* ((a 20) (b (* a a))) (+ b 1)) ; returns 20^2 + 1 = 401       ---
 ;;---------------------------------------------------------------------
 
 ; The difference is that let performs bindings in parallel, whereas let* performs bindings sequentially.
@@ -96,14 +101,57 @@
 ; using let that is equivalent to the general expression (let* ((x1 e1) (x2 e2) … (xn en)) e). Then
 ; also apply your same conversion to the specific expression (let* ((a 20) (b (* a a))) (+ b 1)).
 
+(let ((x1 e1))
+  (let ((x2 e2))
+    (let ((xn en))
+      e
+    )
+  )
+)
+
+(let ((a 20))
+  (let ((b (* a a)))
+    (+ b 1)
+  )
+)
+
 ; 7. Show that each use of let can be replaced by uses of let*. First write a general expression
 ; using let* that is equivalent to the general expression (let ((x1 e1) (x2 e2) … (xn en)) e). Then
 ; also apply your same conversion to the specific expression (let ((a 20) (b (* a a))) (+ b 1)).
 
+(let* ((x1 e1) (x2 e2) ... (xn en))
+  e
+)
+
+(let* ((a 20) (b (* a a))) 
+  (+ b 1)
+)
 
 ; 8. Write the map function in Scheme by using foldl. Do not use explicit recursion, and do not
 ; use either foldr or reverse.
 
+(define (mymap f L)
+  (fold-left 
+    (lambda (x y)
+      (append 
+        y 
+        (list (f x))
+      )
+    )
+    '()
+    L 
+  )
+)
+
+(define (map f L) 
+  (foldl 
+    (lambda (x y) 
+      (append y (list (f x)))
+    ) 
+    '() 
+    L
+  )
+)
 
 ; Please read the following information before solving the next two problems.
 
@@ -112,6 +160,8 @@
 
 ; Also, a property list (or p-list) is a list of alternating keys and data of the form (k1 d1 k2 d2 … kn dn).
 ; Example of a property list: (apple red lemon yellow lime green banana yellow).
+
+
 
 ; 9. Write a Scheme function (a2p alist) that converts a given alist into the corresponding plist.
 ; Do not use the predefined flatten function. Example: (a2p ‘((apple . red) (lemon . yellow)

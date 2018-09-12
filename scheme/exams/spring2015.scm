@@ -5,9 +5,51 @@
 ; 2. Write these five logical functions in Scheme: (not x), (and x y), (or x y), (nand x y), (nor x y).
 ; Use #t for true and #f for false. Hint: each function can be written very concisely.
 
+(define (not2 x)
+  (if x #f #t )
+)
+
+(define (and2 x y)
+  (if x
+    y
+    #f
+  )
+)
+
+(define (or2 x y)
+  (if x
+    #t
+    y
+  )
+)
+
+(define (nand2 x y)
+  (if x
+    #f
+    (if y
+      #f
+      #t
+    )
+  )
+)
+
+(define (nor2 x y)
+  (if x
+    #f
+    (if y
+      #f
+      #t
+    )
+  )
+)
+
 
 ; 3. Write a Scheme function (binary_to_decimal m) that converts m from binary to decimal.
 ; Example: (binary_to_decimal 11010) should return 26.
+
+(define (binary_to_decimal m)
+  
+)
 
 ; 4. In Scheme an association list is a list of pairs, where each pair has the form (key . data).
 ; Write a Scheme function (find key association_list) that returns the data associated with the
