@@ -143,16 +143,6 @@
   )
 )
 
-(define (map f L) 
-  (foldl 
-    (lambda (x y) 
-      (append y (list (f x)))
-    ) 
-    '() 
-    L
-  )
-)
-
 ; Please read the following information before solving the next two problems.
 
 ; An association list (or a-list) is a list of key/data pairs of the form ((k1 . d1) (k2 . d2) … (kn . dn)).
@@ -162,14 +152,34 @@
 ; Example of a property list: (apple red lemon yellow lime green banana yellow).
 
 
-
 ; 9. Write a Scheme function (a2p alist) that converts a given alist into the corresponding plist.
 ; Do not use the predefined flatten function. Example: (a2p ‘((apple . red) (lemon . yellow)
 ; (lime . green) (banana . yellow))) returns (apple red lemon yellow lime green banana yellow).
 
-
+(define (a2p alist)
+  (if (null? alist)
+    '()
+    (cons 
+      (caar alist)
+      (cons
+        (cdar alist)
+        (a2p (cdr alist))
+      )
+    )
+  )
+)
 
 
 ; 10. Write a Scheme function (p2a plist) that converts a given plist into the corresponding alist.
 ; Example: (p2a ‘(apple red lemon yellow lime green banana yellow)) returns ((apple . red)
 ; (lemon . yellow) (lime . green) (banana . yellow)).
+
+(define (p2a plist)
+  (if (null? plist)
+    '()
+    (cons
+      (cons (car plist) (cadr plist))
+      (p2a (cddr plist))
+    )
+  )
+)
