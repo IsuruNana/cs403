@@ -62,20 +62,17 @@
 
 ;;Custom flatten function
 (define (flatten L)
-  (if (null? L) 
-    '()
-    (if (pair? L)
-      ;;Can call car and cdr safely in recursive call
-      (append 
-        (flatten (car L)) 
-        (flatten (cdr L))
-      )
-      (if (null? L)
-        ;;Base case. At closing brace
-        '() 
-        ;;L is not a list so return it as a list
-        (cons L '())
-      )
+  (if (pair? L)
+    ;;Can call car and cdr safely in recursive call
+    (append 
+      (flatten (car L)) 
+      (flatten (cdr L))
+    )
+    (if (null? L)
+      ;;Base case. At closing brace
+      L
+      ;;L is not a list so return it as a list
+      (cons L '())
     )
   )
 )
