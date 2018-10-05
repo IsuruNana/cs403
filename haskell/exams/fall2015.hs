@@ -2,12 +2,15 @@
 -- within list ys. Example: count 5 [2,4,5,7,3,5,8,5,0] returns 3.
 -- count ::
 
+-- count :: Eq a => a -> [a] -> Integer
+count x ys = length [y | y <- ys, x == y]
 
 -- 2. Write a Haskell function partition p xs that returns a pair of lists: the first list contains the
 -- values in xs that satisfy predicate p, and the second list contains the values in xs that do not
 -- satisfy predicate p. Example: partition (>4) [1,3,5,7,9,0,2,4,6,8] returns
 -- ([5,7,9,6,8],[1,3,0,2,4]).
 -- partition ::
+
 
 
 -- 3. First use lazy evaluation to define the short-circuited operators && and ||. Next define
