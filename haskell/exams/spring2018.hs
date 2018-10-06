@@ -46,10 +46,8 @@ isPermutation (x:xs) ys =
 
 -- equiv :: ________________________________________
 
-equiv n = map (help n) [0..n-1] where
-  help n k = k : map (+n) (help n k)
-
-equiv n = [[n * j + k | j <- [0..]] | k <- [0..n-1]]
+equiv n =
+  take n n
 
 -- 4. Haskell’s let construct is semantically equivalent to Scheme’s letrec. That is, the following two expressions are equivalent:
 -- Scheme: (letrec ((x1 e1) (x2 e2) … (xn en)) e)
@@ -57,41 +55,17 @@ equiv n = [[n * j + k | j <- [0..]] | k <- [0..n-1]]
 -- For each Scheme expression below, write an equivalent Haskell expression using anonymous functions (lambdas):
 -- a. Scheme: (let ((x1 e1) (x2 e2) … (xn en)) e)
 -- Haskell:
-(\(x1, x2, ..., xn) -> e ) (e1, e2, e3, ..., en)
-Haskell: (\(a, b, c) -> a*b*c) (2, a+1, b+1)
-
 -- b. Scheme: (let* ((x1 e1) (x2 e2) … (xn en)) e)
 -- Haskell:
 
-(\x1 -> (\x2 -> … (\xn -> e) en) … e2) e1)
-Haskell: (\a -> (\b -> (\c -> a*b*c) (b+1)) (a+1)) 2
-
--- 5. CS 403: (evalpoly p v) takes a polynomial with coefficients given in list p, and evaluates it at v. 
--- Example: The list [2,3,5,6,8,9] denotes polynomial 2 + 3x + 5x2 + 6x3 + 8x4 + 9x5, 
--- therefore evalpoly [2,3,5,6,8,9] 10 returns 2 + 3*10 + 5*102 + 6*103 + 8*104 + 9*105 = 986532.
-
-evalpoly p v =
-  foldl (+) 0 [ x ^ power | x <- p , power <- [0..(len v)] ]
-
-evalpoly p x = foldl (+) 0 (zipWith (*) p (map (x^) [0..]))
-
+-- 5. CS 403: (evalpoly p v) takes a polynomial with coefficients given in list p, and evaluates it at v. Example: The list [2,3,5,6,8,9] denotes polynomial 2 + 3x + 5x2 + 6x3 + 8x4 + 9x5, therefore evalpoly [2,3,5,6,8,9] 10 returns 2 + 3*10 + 5*102 + 6*103 + 8*104 + 9*105 = 986532.
 -- CS 503: Write the evalpoly function described above using both of these two different styles:
 -- (i) Use recursion, but do not call any predefined higher-order functions.
 -- (ii) Use predefined higher-order functions, but do not write any recursion.
 -- evalpoly :: ________________________________________
 
-
-
--- 6. CS 403: (evaluate e) evaluates expression e using the data type Expr shown below. 
--- Example: evaluate (Mul (Add (Val 3) (Val 4)) (Sub (Val 8) (Neg (Val 2)))) returns (3+4)*(8-(-2)) = 70.
+-- 6. CS 403: (evaluate e) evaluates expression e using the data type Expr shown below. Example: evaluate (Mul (Add (Val 3) (Val 4)) (Sub (Val 8) (Neg (Val 2)))) returns (3+4)*(8-(-2)) = 70.
 -- data Expr = Val Integer | Neg Expr | Add Expr Expr | Sub Expr Expr | Mul Expr Expr
-
-evaluate (Val e) = e
-evaluate (Neg e) = – evaluate e
-evaluate (Add e1 e2) = evaluate e1 + evaluate e2
-evaluate (Sub e1 e2) = evaluate e1 – evaluate e2
-evaluate (Mul e1 e2) = evaluate e1 * evaluate e2
-
 -- CS 503: (evaluate e list) evaluates expression e using the data type Expr shown below. The list contains pairs of identifiers and their integer values. Example:
 -- evaluate (Mul (Add (Sym "w") (Sym "x")) (Sub (Sym "y") (Neg (Sym "z")))) [("w",3),("x",4),("y",8),("z",2)] returns (3+4)*(8-(-2)) = 70.
 -- data Expr = Val Integer | Sym String | Neg Expr | Add Expr Expr | Sub Expr Expr | Mul Expr Expr
