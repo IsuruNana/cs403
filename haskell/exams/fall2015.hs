@@ -105,3 +105,6 @@ intersect (x:xs) (y:ys) =
 -- corresponding results. Assume that xs and ys have the same length. Example: combine
 -- (+) (\a -> a*a) head [2,3,5] [[1,2,3],[4,5,6],[7,8]] returns [22 +1, 32 +4, 52 +7] = [5,13,32].
 -- combine ::
+
+combine f g h [] _ = []
+combine f g h (x:xs) (y:ys) = f (g x) (h y) : combine f g h xs ys
