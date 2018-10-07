@@ -5,6 +5,13 @@
 -- apply3 ((1+), not, (1–)) (9, True, 9) returns (10, False, –8).
 -- apply3 ::
 
+apply3 s t = [x | x <- s]
+
+-- apply3 () () = []
+-- apply3 (s:ss) (t:ts) = (s t ++ apply3 ss ts)
+
+-- Optimal
+apply3 (a b c) (x y z) = (a x, b y, c z)
 
 -- 2. (series s f n) returns a list of length n that starts with s, such that each successive value is
 -- obtained by applying function f to its predecessor. Examples:
@@ -15,12 +22,25 @@
 -- series :: 
 
 
+series _ _ 0 = []
+series s f n = s : series (f s) f (n-1)
+
+
 -- 3. (mysqrt n) returns the truncated square root of non-negative integer n. Do not use the
 -- built-in “sqrt” or (^) functions. Example: mysqrt 31 returns 5. For full credit, your function
 -- should be efficient. Hint: Use a helper function that does binary search in the range 0 to n.
 -- For half credit, use a less efficient linear search.
 -- mysqrt ::
 
+mysqrt n = mysqrt' n 0 n
+  where mysqrt' n a b =
+    let m = div (a+b) 2 in
+      if m^2 > n 
+        then mysqrt' n a (m-1)
+      else if (m+1)^2 <= n 
+        then mysqrt' n (m+1) b
+      else 
+        m
 
 -- 4. (factorize n) returns a list of all the prime factors whose product yields the non-negative
 -- integer n. Examples: factorize 360 returns [2,2,2,3,3,5], and factorize 361 returns [19,19].
@@ -28,6 +48,7 @@
 -- possible factors in the range 2 to √n.
 -- factorize :: 
 
+factorize n = 
 
 -- 5. (powerset s) takes a set s represented as a list, and returns a list of all subsets of s. Your
 -- function may arrange each list in any order, because the order of elements within a set
@@ -36,6 +57,9 @@
 -- powerset "abc" returns ["abc", "ab", "ac", "a", "bc", "b", "c", ""].
 -- powerset ::
 
+powerset [ ] = [[ ]]
+powerset (x:xs) = (map (x:) s) ++ s
+  where s = powerset xs
 
 -- 6. Functions foldr’ and foldl’ are the same as built-in foldr and foldl, except that they only work
 -- on non-empty lists and lack an identity element parameter. When defining foldr’ and foldl’,
@@ -47,6 +71,8 @@
 -- foldr' ::
 -- foldl' :: 
 
+foldl' _ (x:[]) = x 
+foldl' f (x0:x1:xs) = foldl' f ((f x0 x1) : xs)  
 
 -- Problems 7 and 8 refer to the following user-defined data type and variables. Observe that in
 -- this Tree definition, Leaf nodes contain values and Branch nodes contain lists of subtrees.
