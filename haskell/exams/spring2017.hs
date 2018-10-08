@@ -10,6 +10,8 @@ apply3 s t = [x | x <- s]
 -- apply3 () () = []
 -- apply3 (s:ss) (t:ts) = (s t ++ apply3 ss ts)
 
+apply3 :: (a->b, c->d. e->f) -> (a, c, e) -> (b, d, f)
+
 -- Optimal
 apply3 (a b c) (x y z) = (a x, b y, c z)
 
@@ -21,6 +23,7 @@ apply3 (a b c) (x y z) = (a x, b y, c z)
 -- series True not 6 returns [True, False, True, False, True, False].
 -- series :: 
 
+series :: a -> (a -> a) -> Int -> [a] 
 
 series _ _ 0 = []
 series s f n = s : series (f s) f (n-1)
@@ -31,6 +34,8 @@ series s f n = s : series (f s) f (n-1)
 -- should be efficient. Hint: Use a helper function that does binary search in the range 0 to n.
 -- For half credit, use a less efficient linear search.
 -- mysqrt ::
+
+mysqrt :: Int -> Int
 
 mysqrt n = mysqrt' n 0 n
   where mysqrt' n a b =
@@ -57,6 +62,8 @@ factorize n =
 -- powerset "abc" returns ["abc", "ab", "ac", "a", "bc", "b", "c", ""].
 -- powerset ::
 
+powerset :: [a] -> [[a]]
+
 powerset [ ] = [[ ]]
 powerset (x:xs) = (map (x:) s) ++ s
   where s = powerset xs
@@ -70,6 +77,8 @@ powerset (x:xs) = (map (x:) s) ++ s
 -- foldl' (>=) [False,True,False] returns (False>=True)>=False = False>=False = True.
 -- foldr' ::
 -- foldl' :: 
+
+
 
 foldl' _ (x:[]) = x 
 foldl' f (x0:x1:xs) = foldl' f ((f x0 x1) : xs)  

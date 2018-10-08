@@ -58,4 +58,7 @@ evensUpTo20 = takeWhile (<= 20) [2,4..]
 
 powList = [3^n | n <- [1..10]]
 
-multTable = [[x* y | y<- [1..10]] | x<- [1..10]]
+multTable = [[x* y | y <- [1..10]] | x <- [1..10]]
+
+randTuple = (1, "Random")
+
