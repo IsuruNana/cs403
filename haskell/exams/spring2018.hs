@@ -13,6 +13,8 @@
 -- fun (++) tail (not . null) [ ] ["abcd","","efg","hij","klm","","nopq"] returns "bcdfgijlmopq".
 -- fun :: ________________________________________
 
+fun :: (a -> b -> b) -> (c -> a) -> (x -> Bool) -> b -> [c] -> b
+
 fun f g p id list = foldl f id [ g x | x <- list, p x]
 -- or
 fun f g p id list = foldl f id (map g (filter p list))

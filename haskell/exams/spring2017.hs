@@ -98,6 +98,8 @@ foldl' f (x0:x1:xs) = foldl' f ((f x0 x1) : xs)
 -- Branch [Leaf “aa”, Branch [Leaf “bb”, Leaf “cc”], Leaf “dd”, Branch [Leaf “ee”, Leaf “ff”], Leaf “gg”].
 -- mapall ::
 
+mapall f (Leaf x) = Leaf (f x)
+mapall f (Branch xs) = Branch (map (mapall f) xs)
 
 -- 8. (level n t) returns a list of all the values in leaf nodes at depth n of tree t. Examples:
 -- level 1 t1 returns [3, 7].
@@ -107,16 +109,30 @@ foldl' f (x0:x1:xs) = foldl' f ((f x0 x1) : xs)
 -- level 2 t2 returns "bcef".
 -- level :: 
 
+level 0 (Leaf x) = [x]
+level _ (Leaf x) = []
+level 0 (Branch xs) = []
+level n (Branch xs) = foldr (++) [] (map (level (n-1)) xs)
 
 -- 9. (table f) builds and returns an infinite 2-dimensional table by applying binary function f to
--- the row and column numbers. Hint: use list comprehensions. Also, (subtable m n t)
--- returns a finite table that consists of the first m rows and n columns of table t. Examples:
+-- the row and column numbers. Hint: use list comprehensions. 
+-- Also, (subtable m n t) returns a finite table that consists of the first m rows and n columns of table t. 
+
+-- Examples:
 -- subtable 4 6 (table (+)) returns [[0,1,2,3,4,5], [1,2,3,4,5,6], [2,3,4,5,6,7], [3,4,5,6,7,8]].
 -- subtable 7 3 (table (*)) returns [[0,0,0], [0,1,2], [0,2,4], [0,3,6], [0,4,8], [0,5,10], [0,6,12]].
 -- subtable 5 4 (table (^)) returns [[1,0,0,0], [1,1,1,1], [1,2,4,8], [1,3,9,27], [1,4,16,64]].
 -- table ::
 -- subtable ::
 
+-- subtable m n t = [ [ t c r | c <- [0..n]] | r <- [0..m] ]
+
+table :: (Int -> Int -> a) -> [[a]]
+subtable :: Int -> Int -> [[a]] -> [[a]]
+
+table f = [[f c r | r <- [0..]] | c <- [0..]]
+
+subtable m n t = take m (map (take n) t)
 
 -- 10. (column k t) returns the kth column of 2-dimensional table t, and (diagonal t) returns the main
 -- diagonal of 2-dimensional table t. Examples (some use the table function from problem 9):
@@ -126,3 +142,9 @@ foldl' f (x0:x1:xs) = foldl' f ((f x0 x1) : xs)
 -- diagonal (table (^)) returns an infinite list [1,1,4,27,256,3125,...].
 -- column ::
 -- diagonal ::
+
+column :: Int -> [[a]] -> [a]
+diagonal :: [[a]] -> [a]
+
+column k t = [x!!k | x<-t]
+diagonal t = [x!!k | (x,k) <- zip t [0..]]
