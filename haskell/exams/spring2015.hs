@@ -1,29 +1,31 @@
 -- 1. convert (xs,ys,zs) returns a list of triples of the corresponding values from the lists xs, ys, zs.
 -- Example: convert ([1,2,3],[4,5,6],[7,8,9]) returns [(1,4,7),(2,5,8),(3,6,9)].
--- convert ::
 
-convert [ ] [ ] [ ] = [ ]
+convert :: ([a], [b], [c]) -> [(a, b, c)]
+
+convert ([ ], [ ], [ ]) = [ ]
 convert (x:xs, y:ys, z:zs) = (x, y, z) : convert xs ys zs 
 
 -- 2. invert is the inverse function of convert. Example: invert [(1,4,7),(2,5,8),(3,6,9)] returns
 -- ([1,2,3],[4,5,6],[7,8,9]).
--- invert ::
 
-invert ([], [], []) = []
+invert :: [(a, b, c)] -> ([a], [b], [c])
+
+invert [] = ([], [], [])
 invert ((x, y, z) : ws) = (x:xs , y:ys, z:zs) where (xs, ys, zs) = invert ws
 
 -- 3. find v xs determines whether or not value v is an element of the ascending infinite list xs.
 -- Example: if evens = 0 : map (+2) evens, then find 8 evens returns True, and find 9 evens
 -- returns False.
--- find ::
+
+find :: Ord a => a -> [a] -> Bool
 
 find v (x:xs) = 
   if(v == x)
     then True
-  else if v < xs
+  else if v < x
     then find v vs
-  else
-    False
+    else False
 
 -- or
 
@@ -32,15 +34,17 @@ find v (x:xs) = v==x || v > x && find v xs
 -- 4. splitRange x y zs returns a pair of lists: the first list contains the values of zs that are in the
 -- range from x to y, and the second list contains the values of zs that are not in range from x
 -- to y. Example: splitRange 3 6 [0,2,4,6,8,10,9,7,5,3,1,0] returns ([4,6,5,3],[0,2,8,10,9,7,1,0]).
--- splitRange ::
 
+splitRange :: Ord a => a -> a -> [a] -> ([a], [a])
 splitRange x y zs = ([z | z <- zs, z >= x, z <= y] , [z | z <- zs,  z < x || z > y])
 
 -- 5. loop f s n applies function f repeatedly n times, beginning from the start value s. Example:
 -- loop tail [2,3,5,7,11,13,17,19,23,29] 4 returns [11,13,17,19,23,29].
 -- loop ::
 
-loop f s 0 = s
+loop :: (Num b, Eq b) => (a -> a) -> [a]
+
+loop _ s 0 = s
 loop f [] 0 = []
 loop f s n = f (loop f s (n-1))
 
@@ -63,6 +67,7 @@ tower x = loop (power x) 1
 -- Example: extremes ["abcd","efghij","klm"] returns ["ad","ej","km"].
 -- extremes ::
 
+extremes :: [[a]] -> [[a]]
 extremes xs = map (\x -> head x ++ last x) xs
 
 -- 8. curry3 and uncurry3 have the same purpose as predefined functions curry and uncurry,
