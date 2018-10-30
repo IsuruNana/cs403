@@ -90,13 +90,23 @@ power(M, N, Q) :- M > 0,
                   power(X, N, Q).
 
 power(_, 0, 1).
-power(M, N, Q) :- N > 0, X is N-1, power(M, X, Y), Q is M*Y
+power(M, N, Q) :- N > 0, X is N-1, power(M, X, Y), Q is M*Y.
 
 % 8. Write a Prolog predicate eval(Expression, Result) that evaluates a prefix Boolean expression
 % over constant values {true, false} and logical operations {not, and, or}. Examples:
 % eval(or(false, and(true, not(false))), X) succeeds with X = true.
 % eval(and(true, or(false, not(true))), Y) succeeds with Y = false.
 
+eval(true, true).
+eval(false, false).
+eval(not(A), true) :- eval(A, false).
+eval(not(A), false) :- eval(A, true).
+eval(and(A,_), false) :- eval(A, false).
+eval(and(_,B), false) :- eval(B, false).
+eval(and(A,B), true) :- eval(A, true), eval(B, true).
+eval(or(A,_), true) :- eval(A, true).
+eval(or(_,B), true) :- eval(B, true).
+eval(or(A,B), false) :- eval(A,false), eval(B,false).
 
 % 9. Write a Prolog predicate isTrue(Expression, List) that succeeds iff the given prefix Boolean
 % expression evaluates to true in an environment where the variables in the given list are true
@@ -108,6 +118,11 @@ power(M, N, Q) :- N > 0, X is N-1, power(M, X, Y), Q is M*Y
 % isTrue(and(x, or(y, not(z))), [x,z]) fails.
 % isTrue(and(x, or(y, not(z))), [x,y,z]) succeeds.
 
+isTrue(A, L) :- atom(A) , member(A, L).
+isTrue(not(A), L) :- not(isTrue(A,L)).
+isTrue(and(A,B), L) :- isTrue(A,L), isTrue(B, L).
+isTrue(or(A,_), L) :- isTrue(A, L).
+isTrue(or(_,B), L) :- isTrue(B, L).
 
 % 10. Explain the differences between imperative programming and declarative programming. Also
 % explain the differences between procedural programming, functional programming, objectoriented
