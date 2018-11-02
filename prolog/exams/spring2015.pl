@@ -61,6 +61,11 @@ descendant(A, B) :- child(C, B), descendant(A, C).
 % 6. Write this predicate using Prolog: prime(N) succeeds if N is a prime number. Examples:
 % prime(11) succeeds, but prime(12) fails.
 
+prime(N) :- N > 1, X is N-1, checkPrime(N , X).
+
+checkPrime(_, 1).
+checkPrime(N, X) :- X > 1, Y is N mod X, R > 0, Y is X-1, check(N, Y).
+
 % 7. Write this predicate using Prolog: selection_sort(X, Y) succeeds if Y is the list that is
 % obtained by sorting the elements of list X into ascending order. Your code must use the
 % selection sort algorithm, which at each step locates the smallest remaining value and places
@@ -68,17 +73,41 @@ descendant(A, B) :- child(C, B), descendant(A, C).
 % sort, merge sort, or quick sort. Example: selection_sort([9, 5, 2, 7, 4, 0], L) succeeds with L
 % = [0, 2, 4, 5, 7, 9].
 
+selection_sort([], []).
+selection_sort([H|T], [A|B]) :- findMin(H, T, A), selection_sort(T, B).
+
+findMin(_, [], A).
+findMin(H, [X|Y], _) :- H < X, findMin(H, Y, H).
+findMin(H, [X|Y], _) :- H > X, findMin(X, Y, X).
+
+minimum([X], X).
+minimum([X, Y|Z], M) :- X < Y, minimum([X|Z], M).
+minimum([X, Y|Z], M) :- X >= Y, minimum([Y|Z], M).
+
+remove(H, [H|T], T).
+remove(X, [H|T], [H|U]) :- not(X=H), remove(X, T, U).
 
 % 8. Write this predicate in Prolog: sublistSum (L, N, S) succeeds if S is a sublist of list L and the
 % sum of the values in S is N. Example: sublistSum([7,3,4,6,1], 12, S) succeeds with S =
 % [7,4,1]. Note that L and N are the input values and S is the output value.
 
+sublistSum([], 0, []).
+sublistSum([_|T], N, S) :- sublistSum(T, N, S).
+sublistSum([H|T], N, [H|Z]) :- M is N-H, sublistSum(T, M, Z). 
 
 % 9. Write this predicate in Prolog: disjoint(X, Y) succeeds if lists X and Y contain none of the
 % same values. Examples: disjoint([5,1,9,3,7], [2,6,0,8,4]) succeeds, but
 % disjoint([5,1,9,3,7], [2,6,3,0,8,4]) fails. Do not assume the existence of any predefined
 % predicates that operate on lists.
 
+disjoint([], _).
+disjoint([H|T], Y) :- checkInList2(H, Y), disjoint(T, Y).
+
+checkInList2(_, []).
+checkInList2(A, [H|T]) :- not(A=H), checkInList2(A, T).
+
+member(H, [H|_]).
+member(A, [_|T]) :- member(A, T).
 
 % 10. Write this predicate using Prolog: diagonal(M, D) succeeds if M is a matrix stored as a
 % list of row lists, and D is a list of its main diagonal elements. Example:
@@ -89,6 +118,12 @@ descendant(A, B) :- child(C, B), descendant(A, C).
 % g h i
 % �
 
+diagonal([[]], []).
+diagonal(L, [X|Y]) :- getValue(L, X), mapHeadToTail(L, NEW_MATRIX),  diagonal(NEW_MATRIX, Y)
+
+getValue([H|_], H).
+
+mapHeadToTail(L, M) :- 
 
 % 11. Write this predicate using Prolog: eval(E, Z) succeeds if Z is the value of expression E.
 % Here an expression is essentially a binary tree with leaves labeled “num( _ )” and

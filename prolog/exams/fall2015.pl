@@ -135,3 +135,5 @@ isTrue(or(_,B), L) :- isTrue(B, L).
 % by sorting the elements of list X into ascending order. Your code must use the merge sort
 % algorithm. Do not use any other sorting algorithm such as insertion sort, selection sort, or
 % quick sort. Example: merge_sort([9, 5, 2, 7, 4, 0], L) succeeds with L = [0, 2, 4, 5, 7, 9]. 
+
+merge_sort([H|T], Y) :- 
