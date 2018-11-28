@@ -45,6 +45,9 @@ Queue extend [
   collect: aBlock [
     |q|
     q := Queue new.
-    self do: [:key | q insert: ]
+    self do: [:key | q insert: (aBlock value: key)].
+    ^q
   ]
 ]
+
+q := Queue new.
