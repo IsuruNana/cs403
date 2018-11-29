@@ -1,4 +1,5 @@
 " 1. Trace this (Squeak) Smalltalk code and show the output in the space indicated.
+
 x := 11.
 A := Array new: 6.
 1 to: A size do: [:j | x := (((x \\ 2) = 1) “ \\ is the mod operator”
