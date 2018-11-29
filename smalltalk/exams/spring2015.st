@@ -15,6 +15,7 @@ Transcript display: x; cr.
 x := 0. "
 
 
+
 " 2. List five (or more) most significant ways that Smalltalk differs from C++ and/or Java. "
 
 
@@ -39,6 +40,23 @@ Y intersects: X. returns true
 Y intersects: Z. returns true
 Z intersects: X. returns false
 Z intersects: Y. returns true"
+
+Object subclass: Interval [
+  |left right|
+  left: l right: r [left := l. right := r]
+  length: [^(right-left)]
+  getLeft: [^left]
+  getRight: [^right]
+
+  disjoint: otherInterval [
+    |otherLeft otherRight|
+    otherLeft := otherInterval getLeft.
+    otherRight := otherInterval getRight.
+
+    ^(left > otherRight) or: [right < otherLeft]
+  ]
+  intersects: otherInterval [^ (disjoint otherInterval) not]
+]
 
 
 " 4. Write two Smalltalk classes, Bag and Set, so that the client code below will behave as
