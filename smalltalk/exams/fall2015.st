@@ -8,12 +8,29 @@ Object subclass: Node [
   getData [^data]
   getNext [^next]
 ]
+
+"
 Collection subclass: LinkedList [
   |front|
   front: f [front := f]
-] "
 
-
+  collect: function [
+    |ReturnList NextNode IsFirstNode TempNode|
+    NextNode := front.
+    IsFirstNode := nil.
+    ReturnList := self class new.
+    [NextNode notNil] whileTrue: [
+      "Create a new node by getting original data and applying function to it"
+      TempNode := Node new data: (function value: NextNode getData)
+      "If this is the first node we are working with, front is tempnode, else 
+      the next node of the current node is the TempNode we created"
+      IsFirstNode isNil ifTrue: [ReturnList front: TempNode] ifFalse: [NextNode next: TempNode]
+      NextNode := NextNode getNext.
+      IsFirstNode := TempNode.
+    ]
+    ^ReturnList
+  ]
+] 
 
 " The next three problems will use this object-oriented class inheritance hierarchy:
 
@@ -77,10 +94,55 @@ Rectangle Ellipse Triangle Sphere Cylinder Box
 Square Circle Equilateral_Triangle Right_Triangle Cube "
 
 
-
 " 2. Write classes Shape, Two_Dimensional_Shape, and Three_Dimensional_Shape in Smalltalk. "
 
+"Object subclass: Shape [
+  |dimensions|
+  new: numDimensions [
+    |instance|
+    instance := super new.
+    dimensions := numDimensions
+    ^ instance
+  ]
+  display [
+    Transcript display: 'Dimensions='; dimensions; cr.
+  ]
+]
+
+Shape subclass: Two_Dimensional_Shape [
+  |length width|
+  new: lengthArg; widthArg [
+    |twoDShape|
+    twoDShape := super new 2.
+    length := lengthArg.
+    width := widthArg.
+    ^twoDShape.
+  ]
+  getLength: [^length]
+  getWidth: [^width]
+]
+
+Shape subclass: Three_Dimensional_Shape [
+  
+  new  [
+    |threeDShape|
+    threeDShape := super new 3.
+  ]
+]"
+
 " 3. Write classes Rectangle and Square in Smalltalk. "
+
+Two_Dimensional_Shape subclass: Rectangle [
+  |width length|
+  width: x [width := x]
+  length: y [length := y]
+  perimeter: [^ 2*length + 2*width]
+  area: [^length*width]
+]
+
+Rectangle subclass: Square [
+  side: x [self width: x length: x]
+]
 
 " 4. Write classes Box and Cube in Smalltalk. "
 

@@ -42,6 +42,7 @@ two instance variables, real and imag. Example outputs: 5-2i, -7+6i. "
 " 5. Write method do: for the Array class "
 
 
+
 " 6. Write method collect: for the Array class "
 
 

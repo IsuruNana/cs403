@@ -9,47 +9,82 @@ A b c: d + e f: g h j: k * m n: p q
 Also rewrite the following expression in an equivalent way that does not use cascades (semicolons).
 Circle new point: 3 @ 4 ; radius: cat at: 5 ; color: dog name "
 
+((((group asSet) asBag) printString) display
+
+(((((1 * 2) + 3) - 4) / 5) * 6) - 7
+
+
+
+
 
 " 2. (c fun) returns the sum of the fourth powers of all the odd positive numbers in Collection c.
 Note that C may be any type of collection such as an array, set, linked list, etc. Examples:
+
 a := #(2 3 -2 6 5 -3).
 a fun printNl. “returns 34 + 54 = 706”
 s := Set new.
 s add: 2 ; add: 3 ; add: -2 ; add: 6 ; add: 5 ; add: -3 .
 s fun printNl. “returns 34 + 54 = 706”
-Collection extend [
- fun [
 
+"
+Collection extend [
+ |list|
+ fun [
+   |sum|
+   sum := 0.
+   1 to: list size do: [
+     :x | (x > 0) ifTrue: [sum := x*x*x*x+sum]
+   ]
+   ^sum
  ]
-]. "
+].
 
 
 " 3. (c totalsize) returns the total number of atomic values nested within all levels of Collection c.
 Note that c may be any type of Collection such as an array, set, linked list, etc. Examples:
+
 a := #(2.7 #( ) #(3.1 #(4 #( #(true #( )) $c #( #(5)) $x)) #( )) false).
 a totalsize printNl. “returns 8”
 s := Set new.
 s add: #(2.7 3.1) ; add: 4 ; add: #(true $c 5) ; add: #( ) ; add: #($x) ; add: #( #(false) ) .
 s totalsize printNl. “returns 8”
+"
+
 Collection extend [
  totalsize [
+    |n| 
+    n := 0.
+    self do: [
+      :x | (x isKindOf: Collection) ifTrue: [n := n + x totalsize] ifFalse: [n := n+1] 
+    ].
+    ^n
  ]
-]. "
+]. 
 
 
 
 " 4. (c flatten) returns a flattened OrderedCollection that contains all the values nested within
 Collection c. Note that C may be any type of collection such as an array, set, linked list, etc.
 Examples:
+
 a := #(2.7 #( ) #(3.1 #(true #( #(4 #( )) $c #( #(5)) $x)) #( )) false).
 a flatten printNl. “returns OrderedCollection (2.7 3.1 true 4 $c 5 $x false)”
 s := Set new.
 s add: #(2.7 3.1) ; add: 4 ; add: #(true $c 5) ; add: #( ) ; add: #($x) ; add: #( #(false) ) .
 s flatten printNl. “returns a permutation of OrderedCollection (2.7 3.1 true 4 $c 5 $x false)”
+
+"
+
 Collection extend [
  flatten [
+   |list|
+   list := OrderedCollection new.
+   self do: [
+     :x | (x isKindOf: Collection) ifTrue: [c addAll: x flatten] ifFalse: [c add: x]
+   ].
+   ^list
  ]
-]. "
+].
 
 
 
@@ -65,7 +100,6 @@ g := counter value.
 (f value: 11) printNl. “returns 21+11 = 32”
 (g value: 12) printNl. “returns 19+12 = 31”
 
-
 CS 503: (counter value) returns a new block that maintains an internal memory (initially 0)
 and that will behave as shown below upon subsequent evaluations of this block. Example:
 f := counter value.
@@ -78,7 +112,7 @@ g := counter value.
 (f value: #sub value: 11) printNl. “returns 21-11 = 10”
 (g value: #add value: 12) printNl. “returns -19+12 = -7” "
 
-
+counter := [ |x| x:=0. [:v | x := x+v] ].
 
 " 6. CS 403: (e eval) evaluates expression e using the class Expr to be defined below. Example:
 e := Mul new left: (Add new left: (Val new put: 3) right: (Val new put: 4))
