@@ -1,4 +1,4 @@
-" 1. Write the output of this Smalltalk program in the space provided.
+" 1. Write the output of this Smalltalk program in the space provided."
 Object subclass: A [
   u ['a' display. self v. 'b' display]
   v ['c' display. self u. 'd' display]
@@ -33,7 +33,12 @@ z x.
 Transcript cr.
 z y.
 Transcript cr.
-Output: "
+" Output: "
+
+"fohgp" "D t"
+"siejt" "z w"
+"karbl" "z x"
+"mcqdn" "z y"
 
 
 " 2. Most types of birds can fly: eagle, duck, crow, robin. But some types of birds cannot fly:
@@ -82,7 +87,8 @@ Scheme’s and Haskell’s foldl functions.) This method should work properly wh
 receiver is an Array, Set, LinkedList, or any other kind of Collection. "
 
 
-" 9. Write the output of this Smalltalk program in the space provided.
+" 9. Write the output of this Smalltalk program in the space provided."
+
 Object subclass: #A.
 A addClassVarName: 'w'.
 A instanceVariableNames: 'x y'.
@@ -106,12 +112,15 @@ r := Array new: 10.
 6 to: 8 do: [:k | r at: k put: C new ].
 9 to: 10 do: [:k | r at: k put: D new ].
 1 to: 10 do: [:k | (r at: k) show ]
-Output: "
+Output:
+
+
 
 
 " 10. Extend the given Smalltalk class Pair, so that the class Quadruple can be defined exactly as
 shown below, and so that the client code given on the right would then produce the output
-as shown. Do not modify the given code, and do not further extend the class Quadruple.
+as shown. Do not modify the given code, and do not further extend the class Quadruple."
+
 Object subclass: Pair [
   | x y |
   x [ ^x ]
@@ -151,4 +160,4 @@ Output:
 1234 true
 1235 false
 2469 false
-2469 true "
+2469 true 
