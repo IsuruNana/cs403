@@ -47,7 +47,8 @@ X at: 1 put: A;
 X do: [:y | y new m: 1; n: 1].
 
 " A m: 1 n: 1 "
-
+5 A
+20 Object
 
 " For the remaining problems, write each of these methods using Smalltalk. Except for
 method printOn:, each method definition is not permitted to call any other method
