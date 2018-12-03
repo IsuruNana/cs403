@@ -1,5 +1,5 @@
 " 1. Write the output values that are printed by this Smalltalk code. Be especially careful
-when determining which value is printed first.
+when determining which value is printed first."
 
 x := 30.
 block1 := [x := (3*x)+1].
@@ -12,7 +12,8 @@ x := 18.
 block5 := [block3 whileTrue: block4].
 block5 value.
 Transcript display: x; cr.
-x := 0. "
+x := 0. 
+
 
 
 
@@ -62,7 +63,7 @@ Object subclass: Interval [
 " 4. Write two Smalltalk classes, Bag and Set, so that the client code below will behave as
 shown. Note that a Bag allows duplicate values, but a Set does not. Your classes may use
 the Node class shown below, but do not use any classes in Smalltalk’s predefined Collection
-hierarchy. Minimize the amount of code you write by using inheritance.
+hierarchy. Minimize the amount of code you write by using inheritance."
 
 b := Bag new init.
 b add: 10; add: 20; add: 10.
@@ -84,7 +85,28 @@ Node extend [
   value: v next: n [value:=v. next:=n]
   getValue [^value]
   getNext [^next]
-] "
+]
+
+Object subclass: #Bag.
+Bag instanceVariableNames: 'head size'
+Bag extend [
+  init: [head := nil. size := 0]
+  add: v [size:=size+1. head := Node new value: v next: head]
+  getSize: [^size].
+  count: val [
+    |found|
+    found := 0.
+    [head isNil] whileFalse: [
+      (head getValue == val) ifTrue: [found := found + 1].
+      head := head getNext
+    ]
+    ^found.
+  ]
+]
+
+Bag subclass: Set [
+  add: v [(self count: v) == 0 ifTrue: [super add: v]]
+]
 
 " 5. In Smalltalk, a message sent to a receiver named super is implemented as a message sent to
 self, except that method search does not begin in the receiver’s class as it normally would.
@@ -108,58 +130,59 @@ LivingThing, Snake, Oak, Plant, Shark, Lion, Flower, Fish. "
 
 " 7. Trace this (GNU-style) Smalltalk code and show the outputs on the indicated blank lines.
 
--------------------------------------------------------
+-------------------------------------------------------"
 Object subclass: #A.
 A extend [
-f: x at: k [x at: k put: 7. self g: x at: k+1]
-g: x at: k [x at: k put: 8. self h: x at: k+1]
-h: x at: k [x at: k put: 9. self i: x at: k+1]
-i: x at: k [x at: k put: 10. self j: x at: k+1]
-j: x at: k [x at: k put: 11. self k: x at: k+1]
-k: x at: k [x at: k put: 12]
+  f: x at: k [x at: k put: 7. self g: x at: k+1]
+  g: x at: k [x at: k put: 8. self h: x at: k+1]
+  h: x at: k [x at: k put: 9. self i: x at: k+1]
+  i: x at: k [x at: k put: 10. self j: x at: k+1]
+  j: x at: k [x at: k put: 11. self k: x at: k+1]
+  k: x at: k [x at: k put: 12]
 ]
 A subclass: #B.
 B extend [
-f: x at: k [x at: k put: 13. self g: x at: k+1]
-h: x at: k [x at: k put: 14. self i: x at: k+1]
-j: x at: k [x at: k put: 15. self k: x at: k+1]
+  f: x at: k [x at: k put: 13. self g: x at: k+1]
+  h: x at: k [x at: k put: 14. self i: x at: k+1]
+  j: x at: k [x at: k put: 15. self k: x at: k+1]
 ]
 A subclass: #C.
 C extend [
-g: x at: k [x at: k put: 16. self h: x at: k+1]
-i: x at: k [x at: k put: 17. self j: x at: k+1]
-k: x at: k [x at: k put: 18]
+  g: x at: k [x at: k put: 16. self h: x at: k+1]
+  i: x at: k [x at: k put: 17. self j: x at: k+1]
+  k: x at: k [x at: k put: 18]
 ]
--------------------------------------------------------
+
+" ------------------------------------------------------- "
 
 y := Array new: 6.
 B new f: y at: 1.
 y do: [:w | w printNl].
-____
-____
-____
-____
-____
-____ 
-(y collect: [:w | 3*w]) printNl.
-________________________
-(y select: [:w | w even]) printNl.
-________________________
-(y inject: 0 into: [:m :n | m+n]) printNl.
-____
 
--------------------------------------------------------
+[13 8 14 10 15 12]
+
+(y collect: [:w | 3*w]) printNl.
+
+(39 24 42 30 45 36)
+
+(y select: [:w | w even]) printNl.
+
+(8 14 10 12)
+
+(y inject: 0 into: [:m :n | m+n]) printNl.
+
+72
+
+" ------------------------------------------------------- "
+
 z := Array new: 6.
 C new f: z at: 1.
 z do: [:w | w printNl].
-____
-____
-____
-____
-____
-____ 
+
+
+
 (z collect: [:w | 3*w]) printNl.
 ________________________
 (z reject: [:w | w even]) printNl.
 ________________________
-(z inject: 0 into: [:m :n | m+n]) printNl. "
+(z inject: 0 into: [:m :n | m+n]) printNl.

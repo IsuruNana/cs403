@@ -95,8 +95,13 @@ A instanceVariableNames: 'x y'.
 A class instanceVariableNames: 'z'.
 A extend [
   init [ w:=w+1. x:=w. y:=self class z. self class incZ ]
-  show [ Transcript display: self class ; display: w ; display: x ;
-  display: y ; display: self class z ; cr ]
+  show [ 
+    Transcript 
+    display: self class ; 
+    display: w ; 
+    display: x ;
+    display: y ; 
+    display: self class z ; cr ]
 ]
 A class extend [
   new [ w isNil ifTrue: [w:=-1]. z isNil ifTrue: [z:=0]. ^super new init ]

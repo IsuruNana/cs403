@@ -49,6 +49,16 @@ X do: [:y | y new m: 1; n: 1].
 " A m: 1 n: 1 "
 5 A
 20 Object
+"B m: 1 n: 1"
+10 B
+21 Object
+"C m: 1 n: 1"
+6 C
+40 Object
+"D m: 1 n: 1"
+16 D
+42 Object
+
 
 " For the remaining problems, write each of these methods using Smalltalk. Except for
 method printOn:, each method definition is not permitted to call any other method
@@ -68,10 +78,22 @@ two instance variables, real and imag. Example outputs: 5-2i, -7+6i. "
 
 " 5. Write method do: for the Array class "
 
-
+Array extend [
+  do: aBlock [
+    1 to: self size do: [:k | aBlock value: (self at: k)]
+  ]
+]
 
 " 6. Write method collect: for the Array class "
 
+Array extend [
+  collect: aBlock [
+    |a|
+    a := Array new: self size.
+    1 to: self size do: [:i | a at: i put: (aBlock value: (self at: i))]
+    ^a
+  ]
+]
 
 " 7. Write method asSet for the Array class "
 
@@ -81,6 +103,13 @@ two instance variables, real and imag. Example outputs: 5-2i, -7+6i. "
 
 " 9. Write method select: for the Set class "
 
+Array extend [
+  select: aBlock [
+    |a|
+    a := Array new: self size.
+    1 to: self size do: [:i | (aBlock value: (self at: i)) ifTrue: [a at: i put: (self at: i)]]
+  ]
+]
 
 " 10. Write method do: for the LinkedList class. Assume this (Gnu-style) definition.
 Object subclass: #Node.
@@ -94,8 +123,24 @@ LinkedList instanceVariableNames: 'front'. "
 " 11. Write method inject:into: for the abstract Collection class. This method should work
 properly when the receiver is an Array, Set, LinkedList, or any other kind of Collection. "
 
-
+Collection extend [
+  inject: start into: aBlock [
+    |res|
+    res := start.
+    self do: [:elem | res := aBlock value: res value: elem].
+    ^res.
+  ]
+]
 
 
 " 12. Write method detect:ifNone: for the abstract Collection class. This method should work
 properly when the receiver is an Array, Set, LinkedList, or any other kind of Collection. "
+
+Collection extend [
+  detect: aBlock ifNone: def [
+    |found|
+    found := False.
+    self do: [:elem | (aBlock value: elem) ifTrue: [found := found or: True]]
+    found ifTrue: [^True] ifFalse:[^def]
+  ]
+]
