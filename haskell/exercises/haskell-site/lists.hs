@@ -163,7 +163,18 @@ compress2 xs = foldr (\a idList -> if a == (head idList) then idList else a:idLi
 -- ["aaaa","b","cc","aa","d","eeee"]
 -- Solutions
 
-pack list = foldl (\idList elem -> ) [] list
+-- buildList f xs = [f xs ]
+
+-- pack xs = [ (\y -> ) x | x <- xs]
+
+-- pack1 xs [] = 
+--     [xs] pack1 [] xs = 
+--         [xs] pack1(x:xs) (y:ys) = 
+--             if (x==y) 
+--                 then pack1((x:xs)++[y]) ys 
+--                 else (x:xs) : pack1[y] ys pack[] = [[]] pack(x:xs) = pack1[x] xs
+
+pack xs = foldl (\id x -> if (head id == x || head (head id) == x) then id : (head id ++ [x]) else id ++ [x]) [head xs] (tail xs)
 
 -- 10 Problem 10
 -- (*) Run-length encoding of a list. Use the result of problem P09 to implement the so-called 
