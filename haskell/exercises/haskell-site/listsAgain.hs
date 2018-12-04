@@ -11,6 +11,16 @@
 -- "aXbcd"
 -- Solutions
 
+-- insertHelp 
+
+insertAt val xs i = foldl (\id x -> if(x==i) then id ++ [val] ++ [xs !! x]  else id ++ [xs !! x]) [] [0..length xs-1]
+
+splitAt2' = \n -> \xs -> (take n xs, drop n xs)
+splitAt3' n xs = [take n xs, drop n xs]
+
+combine xs val = fst xs ++ [val] ++ snd xs
+
+insertAt1 val xs i = combine (splitAt2' i xs) val
 
 -- 2 Problem 22
 -- Create a list containing all integers within a given range.
@@ -25,6 +35,16 @@
 -- [4,5,6,7,8,9]
 -- Solutions
 
+range x y = [x..y]
+
+rangeHelper x y list = 
+  if(x==y) 
+      then list ++ [y] 
+      else rangeHelper (x+1) y (list ++ [x])
+
+
+range2 x y = rangeHelper x y []
+
 -- 3 Problem 23
 -- Extract a given number of randomly selected elements from a list.
 
@@ -37,6 +57,7 @@
 -- Prelude System.Random>rnd_select "abcdefgh" 3 >>= putStrLn
 -- eda
 -- Solutions
+
 
 
 -- 4 Problem 24
@@ -119,7 +140,9 @@
 -- 8 Problem 28
 -- Sorting a list of lists according to length of sublists
 
--- a) We suppose that a list contains elements that are lists themselves. The objective is to sort the elements of this list according to their length. E.g. short lists first, longer lists later, or vice versa.
+-- a) We suppose that a list contains elements that are lists themselves. 
+-- The objective is to sort the elements of this list according to their length. 
+-- E.g. short lists first, longer lists later, or vice versa.
 
 -- Example:
 
@@ -129,6 +152,19 @@
 
 -- Prelude>lsort ["abc","de","fgh","de","ijkl","mn","o"]
 -- Prelude>["o","de","de","mn","abc","fgh","ijkl"]
+
+lsort xs = sortBy (length) xs
+
+lsort xs = 
+  foldl (\id x -> 
+    if(length x >= length (last id)) 
+        then id ++ x 
+        else foldl (\id2 y -> 
+          if(length x < length y) 
+          then x ++ id2 else id2
+      ) [] id
+  ) [] xs
+
 -- b) Again, we suppose that a list contains elements that are lists themselves. But this time the objective is to sort the elements of this list according to their length frequency; i.e., in the default, where sorting is done ascendingly, lists with rare lengths are placed first, others with a more frequent length come later.
 
 -- Example:
