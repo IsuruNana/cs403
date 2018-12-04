@@ -103,12 +103,17 @@
 ; 8. Write the map function in Scheme by using foldl. Do not use explicit recursion, and do not
 ; use either foldr or reverse.
 
-(define (mapBuilder id x f)
-  (append id (f x))
-)
-
 (define (map2 f L)
-  (fold-left ( (lambda id x) (mapBuilder id x f)) '() L)
+  (fold-left 
+    (lambda (id x) 
+      (append 
+        id 
+        (list (f x))
+      )
+    ) 
+    '() 
+    L
+  )
 )
 
 ; Please read the following information before solving the next two problems.
