@@ -13,7 +13,11 @@
 -- fun (++) tail (not . null) [ ] ["abcd","","efg","hij","klm","","nopq"] returns "bcdfgijlmopq".
 -- fun :: ________________________________________
 
+fun :: [a] -> [a] -> 
 
+fun f g p id list = foldl f id [ g l | l <-list, p l]
+--or
+fun f g p id list = foldl f id (map g (filter p list))
 
 -- 2. (isPermutation xs ys) returns True if lists xs and ys are permutations of each other, and otherwise returns False. Examples:
 -- isPermutation [1,2,3,4] [2,4,1,3] returns True.
@@ -21,6 +25,17 @@
 -- isPermutation “abcdef” “fcebda” returns True.
 -- isPermutation :: ________________________________________
 
+isPermutation xs ys = (sort xs) == (sort ys)
+
+--or
+
+permBreaker id x = foldl (\id y -> if(x==y) then id else id ++ [y]) [] id
+isPermutation xs ys = [] == (foldl permBreaker ys xs)
+
+--or
+-- isPermutation(x:[]) _ = True
+-- isPermutation (x:xs) ys = 
+--   True && 
 
 -- 3.(equiv n) returns a list of the equivalence classes of the non-negative integers modulo n, 
 -- where each of the n sublists is an infinite list.  
@@ -29,6 +44,12 @@
 
 -- equiv :: ________________________________________
 
+-- equiv n = map (help n) [0..n-1] 
+--   where 
+--   help n = 
+
+
+equiv n = [ [ n*j+k | j <- [0..] ] | k <- [0..n-1] ]
 
 -- 4. Haskell’s let construct is semantically equivalent to Scheme’s letrec. That is, the following two expressions are equivalent:
 -- Scheme: (letrec ((x1 e1) (x2 e2) … (xn en)) e)
@@ -46,6 +67,11 @@
 -- (i) Use recursion, but do not call any predefined higher-order functions.
 -- (ii) Use predefined higher-order functions, but do not write any recursion.
 -- evalpoly :: ________________________________________
+
+evalHelp p [] _ = 0
+evalHelp p (v:vs) i = (v * (p^i)) + evalHelp p vs (i+1)
+
+evalpoly p vs = evalHelp p vs 0
 
 -- 6. CS 403: (evaluate e) evaluates expression e using the data type Expr shown below. 
 -- Example: evaluate (Mul (Add (Val 3) (Val 4)) (Sub (Val 8) (Neg (Val 2)))) returns (3+4)*(8-(-2)) = 70.
