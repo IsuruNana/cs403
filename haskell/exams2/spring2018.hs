@@ -13,11 +13,6 @@
 -- fun (++) tail (not . null) [ ] ["abcd","","efg","hij","klm","","nopq"] returns "bcdfgijlmopq".
 -- fun :: ________________________________________
 
-fun :: (a -> b -> b) -> (c -> a) -> (x -> Bool) -> b -> [c] -> b
-
-fun f g p id list = foldl f id [ g x | x <- list, p x]
--- or
-fun f g p id list = foldl f id (map g (filter p list))
 
 
 -- 2. (isPermutation xs ys) returns True if lists xs and ys are permutations of each other, and otherwise returns False. Examples:
@@ -26,21 +21,6 @@ fun f g p id list = foldl f id (map g (filter p list))
 -- isPermutation “abcdef” “fcebda” returns True.
 -- isPermutation :: ________________________________________
 
-isPermutation :: [a] -> [a] -> Bool
-
-isPermutation list1 list2 = [True && x == y | x <- (sort list1) , y <- (sort list2)]
-
-isPermutation [ ] [ ] = True
-isPermutation [ ] (_:_) = False
-isPermutation (x:xs) ys = 
-  (any (==x) ys) && isPermutation xs (remove x ys) 
-  where
-    remove x (y:ys) = 
-      if x==y 
-        then ys 
-      else 
-        y:remove x ys
-
 
 -- 3.(equiv n) returns a list of the equivalence classes of the non-negative integers modulo n, 
 -- where each of the n sublists is an infinite list.  
@@ -48,13 +28,6 @@ isPermutation (x:xs) ys =
 -- equiv 5 returns [[0,5,10,15,20,...],[1,6,11,16,21,...],[2,7,12,17,22,...],[3,8,13,18,23,...], [4,9,14,19,24,...]]. 
 
 -- equiv :: ________________________________________
-
-equiv :: Integer -> [[Integer]]
-
-equiv n = map (help n) [0..n-1] where
-  help n k = k : map (+n) (help n k)
-
-equiv n = [ [ n*j+k | j <- [0..] ] | k <- [0..n-1] ]
 
 
 -- 4. Haskell’s let construct is semantically equivalent to Scheme’s letrec. That is, the following two expressions are equivalent:
@@ -74,27 +47,9 @@ equiv n = [ [ n*j+k | j <- [0..] ] | k <- [0..n-1] ]
 -- (ii) Use predefined higher-order functions, but do not write any recursion.
 -- evalpoly :: ________________________________________
 
-evalpoly :: Num a => [Int] -> Int -> Int
-
--- hof
-evalpoly ps v = foldl (+) (zipWith (*) ps (map (v^) [0..v]))
-evalpoly ps v = foldl (+) [p * (v^x) | (p x) <- zip ps [0..length ps - 1]]
-
--- recursion
-evalpoly [ ] _ = 0
-evalpoly (h:t) x = h + x * evalpoly t x
-
 -- 6. CS 403: (evaluate e) evaluates expression e using the data type Expr shown below. 
 -- Example: evaluate (Mul (Add (Val 3) (Val 4)) (Sub (Val 8) (Neg (Val 2)))) returns (3+4)*(8-(-2)) = 70.
 -- data Expr = Val Integer | Neg Expr | Add Expr Expr | Sub Expr Expr | Mul Expr Expr
-
-evaluate :: Expr -> Integer
-
-evaluate Val x = x
-evaluate (Neg x) = - evaluate x
-evaluate (Add x y) = evaluate x + evaluate y
-evaluate (Sub x y) = evaluate x - evaluate y
-evaluate (Mul x y) = evaluate x * evaluate y
 
 -- CS 503: (evaluate e list) evaluates expression e using the data type Expr shown below. 
 -- The list contains pairs of identifiers and their integer values. 

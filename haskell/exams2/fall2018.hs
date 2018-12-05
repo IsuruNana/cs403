@@ -11,10 +11,6 @@
 -- (define (last L)
 -- (define (init L)
 
-last L = head (reverse L)
-
-init L = reverse (tail (reverse L))
-init L = take ((length L) - 1) L 
 
 -- 2. (antitranspose m) returns the anti-transpose of matrix m, which is represented as a list of lists.
 -- Anti-transpose is similar to transpose, but it flips the matrix differently as shown below.
@@ -23,8 +19,6 @@ init L = take ((length L) - 1) L
 
 -- (define (antitranspose m)
 
-antitranspose null = ()
-antitranspose m = reverse (map last m) : antitranspose (map init m)
 
 -- 3. (apply-left funlist x) and (apply-right funlist x) successively apply all the functions in the
 -- funlist beginning with value x. Example: Suppose inc is (lambda (x) (+ x 1)) and double is
@@ -33,30 +27,11 @@ antitranspose m = reverse (map last m) : antitranspose (map init m)
 -- (define (apply-left funlist x)
 -- (define (apply-right funlist x)
 
-applyLeft (f:[]) x = f x 
-applyLeft (f:fs) x = applyLeft fs (f x)
-
-applyRight funlist x = applyLeft (reverse funlist) x
-
-applyRight (_:[]) x = x 
-applyRight (f:fs) x = f (applyRight fs x)
-
--- 4. (first-atom L) and (last-atom L) respectively return the first and last non-null atoms in
--- nested list L. Examples: If L is (( ) (( ) 10) (( ) 20 ( )) (30 ( )) ( )), then (first-atom L) returns 10
--- and (last-atom L) returns 30. You must not use “flatten” for this problem. [20 points]
--- (define (first-atom L)
--- (define (last-atom L)
-
-first-atom L = 
 
 -- 5. (maxdepth L) returns the maximum depth of parentheses nesting in list L. Examples:
 -- (maxdepth '((a) (b (c (d) e) f) (g))) returns 4, and (maxdepth '(( ) ( ( ( ) ) ) ( ))) also returns 4.
 -- [20 points]
 -- (define (maxdepth L)
-
-maxdepth [] 1
-maxdepth L = 
-maxdepth L = 1 + (fold-left max 0 (map maxdepth L))
 
 -- 6. (counter val) and (counter) return a new function that behaves as shown below. The initial value
 -- of each counter may be given as an optional parameter, but otherwise it defaults to 0. The new
@@ -75,9 +50,3 @@ maxdepth L = 1 + (fold-left max 0 (map maxdepth L))
 -- (f 'add 11) ; returns 32
 -- (g 'sub 12) ; returns 978
 -- (define (counter . args)
-
-
--- 7. Explain what unusual thing happens when Scheme evaluates each of these two expressions.
--- Recall that (quote expr) is the same as ’expr. [20 points]
--- a. ((lambda (x) (x x)) (lambda (x) (x x)))
--- b. ((lambda (x) (list x (list (quote quote) x))) (quote (lambda (x) (list x (list (quote quote) x)))))
