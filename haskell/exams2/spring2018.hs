@@ -69,7 +69,7 @@ equiv n = [ [ n*j+k | j <- [0..] ] | k <- [0..n-1] ]
 -- evalpoly :: ________________________________________
 
 evalHelp p [] _ = 0
-evalHelp p (v:vs) i = (v * (p^i)) + evalHelp p vs (i+1)
+evalHelp p (v:vs) i = (v * (p ^ i)) + evalHelp p vs (i+1)
 
 evalpoly p vs = evalHelp p vs 0
 
