@@ -5,69 +5,58 @@
 ; 2. Write these five logical functions in Scheme: (not x), (and x y), (or x y), (nand x y), (nor x y).
 ; Use #t for true and #f for false. Hint: each function can be written very concisely.
 
-(define (not2 x)
-  (if x #f #t )
-)
-
-(define (and2 x y)
-  (if x
-    y
+(define (not x)
+  (if (x)
     #f
-  )
-)
-
-(define (or2 x y)
-  (if x
     #t
+  )
+)
+
+(define (and x y)
+  (if x
+    y
+    #f
+  )
+)
+
+(define (or x y)
+  (if x
+    x
     y
   )
 )
 
-(define (nand2 x y)
-  (if x
-    #f
-    (if y
-      #f
-      #t
-    )
-  )
+(define (nand x y)
+  (not (and x y))
 )
-
-(define (nor2 x y)
-  (if x
-    #f
-    (if y
-      #f
-      #t
-    )
-  )
-)
-
 
 ; 3. Write a Scheme function (binary_to_decimal m) that converts m from binary to decimal.
 ; Example: (binary_to_decimal 11010) should return 26.
 
-(define (binary_to_decimal m)
-  (if (= m 0)
-    0
-    (+
-      (* 2 (binary_to_decimal (quotient m 10)))
-      (modulo m 10)
-    )
-  )
-)
+; (define (b2DH m i v)
+;   (if (equal? m 0)
+;     v 
+;     (if (equal? (modulo m 10) 1
+;       (b2DH (modulo m 10) (i+1) (v + (expt 2 i)))  
+;     )
+;   )
+; )
+
+; (define (binary_to_decimal m)
+  
+; )
 
 ; 4. In Scheme an association list is a list of pairs, where each pair has the form (key . data).
 ; Write a Scheme function (find key association_list) that returns the data associated with the
 ; given key. If the key is not found, return #f. Examples: (find ’c ’((a . w) (b . x) (c . y) (d . z)))
 ; returns y, and (find ’e ’((a . w) (b . x) (c . y) (d . z))) returns #f.
 
-(define (find key association_list)
-  (if (null? association_list)
+(define (find key list)
+  (if (null? list)
     #f
-    (if (eq? (caar association_list) key)
-      (cdr (car association_list))
-      (find key (cdr association_list))
+    (if (equal? (car (car list)) key)
+      (cdr (car list))
+      (find key (cdr list))
     )
   )
 )
@@ -82,13 +71,14 @@
 ; \ m n o p \
 ; \---   ---\ 
 
+; (define (diagonal M)
+;   (fold-left (lambda (id x) ()) M M)
+; )
+
 (define (diagonal M)
   (if (null? M)
     '()
-    (cons
-      (caar M)
-      (diagonal (map cdr (cdr M)))
-    )
+    (cons (car (car M)) (diagonal (map cdr (cdr M))))
   )
 )
 
@@ -96,18 +86,12 @@
 
 ; a. Using let, write an equivalent expression that evaluates subexpression (g x y) only once.
 
-(let ((a (g x y)))
+(define (a (g x y))
   (f a a a)
 )
 
 ; b. Using lambda, write an equivalent expression that evaluates subexpression (g x y) only once.
 
-(
-  (lambda (z)
-    (f z z z)
-  )
-  (g x y)
-)
 
 ; 7. Evaluate each of these Scheme expressions. Match up the parentheses carefully!
 ; a. ((lambda (x) ((lambda (y) ((lambda (z) (* x (- y z))) 5)) 9)) 2) ________
@@ -131,22 +115,27 @@
 (define (inner_product X Y f g)
   (if (null? (cdr X))
     (g (car X) (car Y))
-    (f
-      (g (car X) (car Y))
-      (inner_product (cdr X) (cdr Y) f g)
-    )
+    (f (g (car X) (car Y)) (inner_product (cdr X) (cdr Y) f g))
   )
 )
 
 ; 9. Write (inner_product X Y f g) using map, foldl, foldr, and/or zip. Do not use explicit recursion.
 
-(define (inner_product X Y f g)
-  (fold-left f (g (car X) (car Y)) (zip g (cdr X) (cdr Y)))
-)
+; (define (inner_product X Y f g)
+;   (let (comb (zip X Y))
+;     (fold-left (lambda (id x) (f id (g (caar comb) (cdr (car comb))))) (g (caar comb) (cdr (car comb))) (cdr comb)) 
+;   )
+; )
 
+(define (inner_product X Y f g)
+  (fold-left f (g (car X) (car Y)) (zipWith g (cdr X) (cdr Y)))
+)
 
 ; 10. Write the map function in Scheme by using foldr. Do not use explicit recursion.
 
+(define (map2 f L)
+  
+)
 
 
 ; The next two problems ask you to write a Scheme function (outer_product X Y f) that returns the
@@ -162,33 +151,46 @@
 
 ; 11. Write (outer_product X Y f) using recursion. Do not use map, foldl, foldr, or zip.
 
-(define (make_sublist x Y f)
+(define (applyF2 f x Y)
   (if (null? Y)
     '()
-    (cons
-      (f x (car Y))
-      (make_sublist x (cdr Y) f)
-    )
+    (cons (f x (car Y)) (applyF2 f x (cdr Y) ))
   )
 )
 
 (define (outer_product X Y f)
   (if (null? X)
     '()
-    (cons
-      (make_sublist (car X) Y f)
-      (outer_product (cdr X) Y f)
-    )
+    (cons (applyF2 f (car X) Y) (outer_product (cdr X) Y f))
   )
 )
-
 ; 12. Write (outer_product X Y f) using map, foldl, foldr, and/or zip. Do not use explicit recursion.
 ; (outer_product '(1 2 3) '(4 5 6 7) *) should return the list ((4 5 6 7) (8 10 12 14) (12 15 18 21)).
 
-(define (helper x Y f)
-  (map (lambda (b) (f x b)) Y)
+; (define (buildList id x)
+;   (cons 
+;     id 
+;     (map (lambda (y) (f x y)) Y)
+;   )
+; )
+
+(define (outer_product X Y f)
+  (fold-left 
+    (lambda (id x) 
+      (append 
+        id 
+        (list (map (lambda (y) (f x y)) Y))
+      )
+    ) 
+    '() 
+    X
+  )
+)
+
+(define (outHelp f x Y)
+  (map (lambda (y) (f x y)) Y)
 )
 
 (define (outer_product X Y f)
-  (map (lambda (a) (helper a Y f)) X)
+  (map (lambda (x) (outHelp f x Y)) X)
 )
