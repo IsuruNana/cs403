@@ -68,10 +68,15 @@ equiv n = [ [ n*j+k | j <- [0..] ] | k <- [0..n-1] ]
 -- (ii) Use predefined higher-order functions, but do not write any recursion.
 -- evalpoly :: ________________________________________
 
+--i
 evalHelp p [] _ = 0
 evalHelp p (v:vs) i = (v * (p ^ i)) + evalHelp p vs (i+1)
 
 evalpoly p vs = evalHelp p vs 0
+
+--ii
+
+evalpoly p vs = fold-left (+) 0  [ x * (p ^ y) | (x y) <- zip vs [0..]]
 
 -- 6. CS 403: (evaluate e) evaluates expression e using the data type Expr shown below. 
 -- Example: evaluate (Mul (Add (Val 3) (Val 4)) (Sub (Val 8) (Neg (Val 2)))) returns (3+4)*(8-(-2)) = 70.

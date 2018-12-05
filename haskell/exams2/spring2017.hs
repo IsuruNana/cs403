@@ -5,6 +5,7 @@
 -- apply3 ((1+), not, (1–)) (9, True, 9) returns (10, False, –8).
 -- apply3 ::
 
+apply3 s t = 
 
 -- 2. (series s f n) returns a list of length n that starts with s, such that each successive value is
 -- obtained by applying function f to its predecessor. Examples:
