@@ -21,7 +21,7 @@ evalAt([H|T], V, I, R) :- Y is I+1, evalAt(T, V, Y, Z), R is Z + H*(V**I).
 % # and returns the result in R. Example: the query
 % # transpose([[1,2,3],[4,5,6],[7,8,9],[10,11,12]],R) yields R = [[1,4,7,10],[2,5,8,11],[3,6,9,12]].
 
-transpose([], []).
+transpose([[]|_], []) :- !.
 transpose(L, [A|B]) :- getHeads(L, M, A), transpose(M, B).
 
 getHeads([], [], []).
@@ -35,6 +35,8 @@ getHeads([[H|T]|T2], [T|B], [H|Y]) :-  getHeads(T2, B, Y).
 % # player should remove in Y. The table below summarizes some examples of the query win(X,Y):
 % # X 1 2 3 4 5 6 7 8 9 10
 % # Y 1 fails 1 2 fails 1 fails 1 4 5
+
+
 
 % # 5. CS 403: Two people are kth cousins if each has an ancestor k generations back which are
 % # siblings. For example, 1st cousins are children of siblings. Suppose a Prolog database

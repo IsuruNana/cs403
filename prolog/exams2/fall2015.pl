@@ -14,7 +14,11 @@
 % • nephew(X, Y), which means that X is a nephew of Y.
 % Note: your nephew is your brother’s son, sister’s son, or spouse’s nephew.
 
+nephew(X, Y) :- male(X), helper(X, Y).
+% nephew(X, Y) :- male(X), 
 
+helper(A, B) :- parent(A, X), sibling(B, X).
+helper(A, B) :- parent(A, X), sibling(X, W), spouse(W, B).
 
 % • niece(X, Y), which means that X is a niece of Y.
 % Note: your niece is your brother’s daughter, sister’s daughter, or spouse’s niece.
@@ -36,6 +40,11 @@
 % [1,2,…,N–1,N] and [N,N–1,…,2,1]. Examples:
 % function(5, Z) succeeds when Z = 1*5 + 2*4 + 3*3 + 4*2 + 5*1 = 35.
 % function(6, Z) succeeds when Z = 1*6 + 2*5 + 3*4 + 4*3 + 5*2 + 6*1 = 56.
+
+function(X, Z) :- helper(N, 1, 0, F).
+
+helper(0, _, F, F).
+helper(X, Y, Z, F) :- X>0, A is X-1, B is Y+1, C is (X*Y) + Z, helper(A, B, C, F).
 
 % 6. You are given this Prolog database. Assume that append is defined in the usual way.
 % predicate([ ], [ ]).
@@ -62,6 +71,8 @@
 % log(2, 16, N) yields N=4. 
 % log(2, 10, N) yields N=4.
 
+power(_, 0, 1).
+power(X, Y, R) :- Z is Y-1, power(X, Z, A), R is A*X.
 
 % 8. Write a Prolog predicate eval(Expression, Result) that evaluates a prefix Boolean expression
 % over constant values {true, false} and logical operations {not, and, or}. Examples:

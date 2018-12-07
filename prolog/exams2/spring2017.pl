@@ -17,6 +17,8 @@
 % # 2. twist(L, R) reverses the top level of list L, and recursively twists every nested sublist. Example:
 % # twist([1,2,[a,b],[3,[4,c],d],[[e,f],[5,6]],g,7], R) returns R = [7,g,[[6,5],[f,e]],[d,[c,4],3],[b,a],2,1].
 
+twist(H, H) :- atomic(H).
+twist([H|T], R) :- twist(H, X), twist(T, Y), append(Y, [X], R).
 
 % # 3. mysqrt(N, R) returns the truncated square root of non-negative integer N. Do not use the
 % # built-in “sqrt” or ** functions. Example: mysqrt(31, R) returns R = 5. For full credit, your
@@ -36,9 +38,14 @@
 % # 5. countall(L, R) counts the total number of values within all nested levels of L that are not lists.
 % # Example: countall([a,b,[c,[ ],[d]],[[e,[f],[[g]],[ ]],h]], R) returns R = 8.
 
+countall([], 0).
+countall(X, 1) :- atomic(X), not(X=[]).
+countall([H|T], R) :- countall(H, A), countall(T, B), R is A+B.
+
 % # 6. powerset(S, R) takes a set S represented as a list, and returns a list with all the subsets of S. Your
 % # predicate may arrange each list in any order, because the order of elements within a set does
 % # not matter. Example: powerset([a,b,c], R) returns R = [[a,b,c], [a,b], [a,c], [a], [b,c], [b], [c], [ ]].
+
 
 
 % # 7. level(N, L, R) returns a list of all the non-list values that are nested N levels deep within L.
@@ -53,6 +60,9 @@
 % # succeeds iff all the values in list L1 are different from all the values in list L2. Examples:
 % # distinct([a,b,c,d,e]) returns true, and distinct([a,b,c,d,b,e]) returns false.
 % # disjoint([a,b,a,c], [d,e,f,e]) returns true, and disjoint([a,b,c,d], [e,c,f,g]) returns false.
+
+distinct([]).
+distinct([H|T], R) :- not(member(H, T)), distinct(T).
 
 % checksublist(x, [], False).
 % checksublist(x, [H|T], exists) :- checksublist(x, T, match), exists is or(x = H, match).

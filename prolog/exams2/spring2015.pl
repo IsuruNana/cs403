@@ -3,6 +3,8 @@
 % called a dot product. You may assume that lists X and Y have the same length. Example:
 % inner([1,2,3], [4,5,6], 32), because 1*4+2*5+3*6 = 32.
 
+inner([], [], 0).
+inner([A|B], [C|D], R) :- inner(B, D, X), R is X + A*C.
 
 % 2. Write this predicate using Prolog: outer(X,Y,Z) succeeds when Z is the outer product of lists X
 % and Y with respect to binary operation *. This kind of outer product is also called a
@@ -13,12 +15,20 @@
 % element of X and the kth element of Y. Example: outer([1,2,3], [4,5,6,7],
 % [[4,5,6,7],[8,10,12,14],[12,15,18,21]]).
 
+outer([], _, []).
+outer([A|B], Y, [C|D]) :- getRow(A, Y, C), outer(B, Y, D).
+
+getRow(_, [], []).
+getRow(A, [H|T], [X|Y]) :- X is A*H, getRow(A, T, Y).
+
 % 3. Write this predicate using Prolog: scan(L, Q) succeeds if L and Q are lists of numbers, and Q is
 % obtained by summing each possible prefix of L. Example: scan([2,3,5,7,11,13], Q) succeeds
 % with Q = [0,2,5,10,17,28,41].
 
+scan(L, Q) :- scan2(L, 0, Q).
 
-% scan2(L, Q) :- 
+scan2([], _, []).
+scan2([H|T], 0, Q) :- 
 
 % 4. Suppose a Prolog database currently contains only facts of the form parent(x, y), which
 % means that x is a parent of y. Write Prolog rules for each of the following:
