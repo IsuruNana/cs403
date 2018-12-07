@@ -4,13 +4,28 @@
 % # 1. fun(L, R) computes the sum of the fourth powers of all the odd positive numbers in the list L,
 % # and returns the result in R. Example: the query fun([2,3,-2,6,5,-3], R) yields R = 34 + 54 = 706.
 
+fun([], 0).
+fun([H|T], R) :- H > 0, 1 is mod(H, 2), fun(T, X), Y is H*H*H*H, R is Y+X, !.
+fun([_|T], R) :- fun(T, R).
+
 % # 2. evalpoly(P, V, R) takes a polynomial with coefficients given in list P, and evaluates it at V. Example:
 % # The list [2,3,5,6,8,9] denotes polynomial 2 + 3x + 5x2 + 6x3 + 8x4 + 9x5, therefore the query
 % # evalpoly([2,3,5,6,8,9],10,R) yields R = 2 + 3*10 + 5*102 + 6*103
 
+evalpoly(P, V, R) :- evalAt(P, V, 0, R).
+
+evalAt([], _, _, 0).
+evalAt([H|T], V, I, R) :- Y is I+1, evalAt(T, V, Y, Z), R is Z + H*(V**I).
+
 % # 3. transpose(M, R) constructs the transpose of matrix M, which is represented as a list of lists,
 % # and returns the result in R. Example: the query
 % # transpose([[1,2,3],[4,5,6],[7,8,9],[10,11,12]],R) yields R = [[1,4,7,10],[2,5,8,11],[3,6,9,12]].
+
+transpose([], []).
+transpose(L, [A|B]) :- getHeads(L, M, A), transpose(M, B).
+
+getHeads([], [], []).
+getHeads([[H|T]|T2], [T|B], [H|Y]) :-  getHeads(T2, B, Y).
 
 % # 4. In a game of nim, two players alternate turns, and each turn consists of removing stones from
 % # a pile. Each player may remove either 1 stone or n/2 stones, where n is the current number
