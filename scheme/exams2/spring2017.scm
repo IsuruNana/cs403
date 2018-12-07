@@ -4,18 +4,59 @@
 ; (sequence 3 (lambda (x) (+ x 10)) 8) returns (3 13 23 33 43 53 63 73).
 ; (sequence 5 (lambda (x) (* x 2)) 7) returns (5 10 20 40 80 160 320).
 
+(define (sequence s f n)
+  (if (eq? n 1)
+    (list s)
+    (cons s (sequence (f s) f (- n 1)))
+  )
+)
+
+; (define (sequence s f n)
+;   (fold-left )
+; )
 
 ; 2. (twist L) reverses the top level of list L, and recursively twists every nested sublist. Example:
 ; (twist '(1 2 (a b) (3 (4 c) d) ((e f) (5 6)) g 7)) returns (7 g ((6 5) (f e)) (d (c 4) 3) (b a) 2 1).
 
+; (define (twist L)
+;   (if (null? L)
+;     '()
+;     (cons (twist))
+;   )
+; )
 
 ; 3. (countall L) counts the total number of values within all nested levels of L that are neither
 ; pairs nor null. Example: (countall '(a b (c ( ) (d)) ((5 (10) ((15)) ( )) #t))) returns 8.
+
+(define (countall L)
+  (if (null? L)
+    0
+    (if (not (pair? L))
+      1
+      (+ 
+        (countall (car L))
+        (countall (cdr L))
+      )
+    )
+  )
+)
 
 ; 4. (mapall f L) applies the function f to all values within all nested levels of L that are neither
 ; pairs nor null. Example: (mapall square '(2 3 (4 ( ) (5)) ((6 (7) ((8)) ( )) 9))) returns
 ; (4 9 (16 ( ) (25)) ((36 (49) ((64)) ( )) 81)).
 
+(define (mapall f L)
+  (if (null? L)
+    L
+    (if (not (pair? L))
+      (f L)
+      (cons
+        (mapall f (car L))
+        (mapall f (cdr L))  
+      )
+    )
+  )
+)
 
 ; 5. (mysqrt n) returns the truncated square root of non-negative integer n. Do not use the built-in
 ; “sqrt” function. Example: (mysqrt 31) returns 5 because 5 ≤ √31 < 6. For maximum credit,
@@ -47,6 +88,13 @@
 ; (define (and x y) (if x y #f))
 ; (define (or x y) (if x #t y))
 
+(define (forall f L)
+  (fold-left (lambda (id x) (and id (f x))) #t L)
+)
+
+(define (exists f L)
+  (fold-left (lambda (id x) (or id (f x))) #t L)
+)
 
 ; 10. In this problem, each set is represented as a predicate rather than as a list of elements.
 ; Several example functions on such sets are provided below. Also write these additional
