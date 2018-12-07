@@ -25,10 +25,11 @@ getRow(A, [H|T], [X|Y]) :- X is A*H, getRow(A, T, Y).
 % obtained by summing each possible prefix of L. Example: scan([2,3,5,7,11,13], Q) succeeds
 % with Q = [0,2,5,10,17,28,41].
 
-scan(L, Q) :- scan2(L, 0, Q).
+% scan([], [0]).
+% scan([H|T], [0|Z]) :- scan(T, Y), scan2(H, Y, Z).
 
-scan2([], _, []).
-scan2([H|T], 0, Q) :- 
+% scan2([], _, []).
+% scan2([H|T], X, [X|Y]) :- Y is H+X, scan2(T, Y, ) 
 
 % 4. Suppose a Prolog database currently contains only facts of the form parent(x, y), which
 % means that x is a parent of y. Write Prolog rules for each of the following:
@@ -62,6 +63,12 @@ scan2([H|T], 0, Q) :-
 % disjoint([5,1,9,3,7], [2,6,3,0,8,4]) fails. Do not assume the existence of any predefined
 % predicates that operate on lists.
 
+disjoint([], []).
+disjoint([A|B], C) :- not(member(A, C)), disjoint(B, C).
+
+member(H, [H|_]).
+member(A, [_|T]) :- member(A, T).
+
 % 10. Write this predicate using Prolog: diagonal(M, D) succeeds if M is a matrix stored as a
 % list of row lists, and D is a list of its main diagonal elements. Example:
 % diagonal([[a,b,c],[d,e,f],[g,h,i]], D) succeeds with D = [a,e,i].
@@ -70,6 +77,12 @@ scan2([H|T], 0, Q) :-
 % d e f
 % g h i
 % �
+
+diagonal([], []).
+diagonal([[H|_]|T2], [H|B]) :- chopOff(T2, A), diagonal(A, B).
+
+chopOff([], []).
+chopOff([[_|T]|T2], [T|B]) :- chopOff(T2, B). 
 
 % 11. Write this predicate using Prolog: eval(E, Z) succeeds if Z is the value of expression E.
 % Here an expression is essentially a binary tree with leaves labeled “num( _ )” and
