@@ -1,17 +1,81 @@
 ; 1. (fun L) returns the sum of the fourth powers of all the odd positive numbers in the list L.
 ; Example: (fun '(2 3 -2 6 5 -3)) returns 3^4 + 5^4 = 706.
 
+(define (fun L)
+  (if (null? L)
+    0
+    (if (not (pair? L))
+      (if (and (> L 0) (odd? L))
+        (expt L 4)
+        0
+      )
+      (+ 
+        (fun (car L))
+        (fun (cdr L))
+      )
+    )
+  )
+)
+
+(define (filteredList L)
+  (filter (lambda(x) (and (> x 0) (odd? x))) L)
+)
+
+(define (fun2 L)
+  (fold-left (lambda(id x) (+ id (expt x 4))) 0 (filteredList L))
+)
 
 ; 2. (matrix r c x) returns a matrix which is represented as a list of lists. The matrix will have r rows
 ; and c columns, and will contain elements with successive values x, x+1, x+2, … Example:
 ; (matrix 3 4 1) returns ((1 2 3 4) (5 6 7 8) (9 10 11 12)). Hint: write a helper function that
 ; produces one row of the matrix.
 
+(define (makeRow c x)
+  (if (eq? c 0)
+    '()
+     (cons x (makeRow (- c 1) (+ 1 x)))
+  )
+)
+
+(define (matrix r c x)
+  (if (eq? r 0)
+    '()
+    (cons
+      (makeRow c x)
+      (matrix (- r 1) c (+ c x))
+    )
+  )
+)
+
+; (matrix 3 4 1)
 
 ; 3. (transpose M) returns the transpose of matrix M, which is represented as a list of lists.
 ; Example: (transpose ‘((1 2 3) (4 5 6) (7 8 9) (10 11 12))) returns ((1 4 7 10) (2 5 8 11) (3 6 9 12)).
 ; You are not permitted to use zip for this problem.
 
+; (define (getHeads M)
+;   (map (lambda (x) (car L)) M)
+; )
+
+; (define (getTails M)
+;   (map (lambda (x) (cdr L)) M)
+; )
+
+; (define (transpose M)
+;   (if (null? (car L))
+    
+;   )
+; )
+
+(define (transpose M)
+  (if (null? (car M))
+   '()
+    (cons
+      (map car M)
+      (transpose (map cdr M))  
+    )
+  )
+)
 
 ; 4. Scheme provides both let and let* to define local variables, but both can be replaced by lambdas.
 ; a. First write an expression using lambda that is equivalent to (let ((x1 e1) (x2 e2) … (xn en)) e).
