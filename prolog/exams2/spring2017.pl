@@ -34,6 +34,18 @@ twist([H|T], R) :- twist(H, X), twist(T, Y), append(Y, [X], R).
 % # For full credit, your function should be efficient. Hint: Use a helper predicate that checks
 % # possible factors in the range 2 to √N.
 
+factorize(N, R) :- fact2(N, 2, R).
+
+fact2(1, _, []).
+fact2(N, I, [I|X]) :- isPrime(I), 0 is mod(N, I), M is div(N, I), fact2(M, I, X).
+fact2(N, I, R) :- J is I+1, fact2(N, J, R).
+
+divisible(X,Y) :- 0 is X mod Y, !.
+divisible(X,Y) :- X > Y+1, divisible(X, Y+1).
+
+isPrime(2) :- true,!.
+isPrime(X) :- X < 2,!,false.
+isPrime(X) :- not(divisible(X, 2)).
 
 % # 5. countall(L, R) counts the total number of values within all nested levels of L that are not lists.
 % # Example: countall([a,b,[c,[ ],[d]],[[e,[f],[[g]],[ ]],h]], R) returns R = 8.
@@ -45,7 +57,6 @@ countall([H|T], R) :- countall(H, A), countall(T, B), R is A+B.
 % # 6. powerset(S, R) takes a set S represented as a list, and returns a list with all the subsets of S. Your
 % # predicate may arrange each list in any order, because the order of elements within a set does
 % # not matter. Example: powerset([a,b,c], R) returns R = [[a,b,c], [a,b], [a,c], [a], [b,c], [b], [c], [ ]].
-
 
 
 % # 7. level(N, L, R) returns a list of all the non-list values that are nested N levels deep within L.
