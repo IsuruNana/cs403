@@ -134,6 +134,10 @@
 -- (5, 23)
 -- Solutions
 
+isPrime _ 1 = True
+isPrime x y = if (mod x y == 0) then False else isPrime x (y-1)
+
+goldbach t = take 1 [ (x, t-x) | x <- [2..], isPrime x (x-1), isPrime (t-x) (t-x-1)]
 
 -- 12 Problem 41
 -- (**) Given a range of integers by its lower and upper limit, print a list of all even numbers and their Goldbach composition.

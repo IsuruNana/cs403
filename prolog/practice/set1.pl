@@ -52,7 +52,7 @@ do_rev([X|Y], L2, R) :- do_rev(Y, L2, [X|R]).
 % P06 (*) Find out whether a list is a palindrome.
 % A palindrome can be read forward or backward; e.g. [x,a,m,a,x].
 
-is_palindrome(L1)
+% is_palindrome(L1)
 
 % P07 (**) Flatten a nested list structure.
 % Transform a list, possibly holding lists as elements into a `flat' list by replacing each list with its elements (recursively).
@@ -86,3 +86,44 @@ is_palindrome(L1)
 % Example:
 % ?- encode([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
 % X = [[4,a],[1,b],[2,c],[2,a],[1,d][4,e]]
+
+
+
+% 1.17 (*) Split a list into two parts; the length of the first part is given.
+% Do not use any predefined predicates.
+
+% Example:
+% ?- split([a,b,c,d,e,f,g,h,i,k],3,L1,L2).
+% L1 = [a,b,c]
+% L2 = [d,e,f,g,h,i,k]
+
+splitList(L, 0, [], L).
+splitList([H|T], I, [H|A], B) :- X is I-1, splitList(T, X, A, B).
+
+% 1.18 (**) Extract a slice from a list.
+% Given two indices, I and K, the slice is the list containing the elements between the I'th and K'th element of the original list (both limits included). Start counting the elements with 1.
+
+% Example:
+% ?- slice([a,b,c,d,e,f,g,h,i,k],3,7,L).
+%  L = [c,d,e,f,g]
+
+slice(L, I, J, L3) :- Y is I-1, splitList(L, Y, L1, L2), Z is J-I+1, splitList(L2, Z, L3, L4).
+
+
+% 1.19 (**) Rotate a list N places to the left.
+% Examples:
+% ?- rotate([a,b,c,d,e,f,g,h],3,X).
+% X = [d,e,f,g,h,a,b,c]
+
+% ?- rotate([a,b,c,d,e,f,g,h],-2,X).
+% X = [g,h,a,b,c,d,e,f]
+
+rotate(L, I, R) :- I > 0, splitList(L, I, L1, L2), append(L2, L1, R).
+rotate(L, I, R) :- length(L, Len), Y is Len + I, splitList(L, Y, L1, L2), append(L2, L1, R).
+
+% 1.21 (*) Insert an element at a given position into a list.
+% Example:
+% ?- insert_at(alfa,[a,b,c,d],2,L).
+% L = [a,alfa,b,c,d]
+
+insert_at(Elem, L, I, R) :- Y is I-1, splitList(L, Y, L1, L2), append(L1, [Elem], Z), append(Z, L2, R).

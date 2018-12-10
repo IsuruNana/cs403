@@ -77,6 +77,16 @@
   )
 )
 
+(define (flatten2 L)
+  (if (null? L)
+    '()
+    (if (not (pair? L))
+      (list L)
+      (append (flatten (car L)) (flatten (cdr L)))
+    )
+  )
+)
+
 ;;Custom filter function
 (define (filt f L)
   (if (null? L)
@@ -121,7 +131,7 @@
     '()
     (cons 
       (list (car L1) (car L2))
-      (z (car L1) (car L2))
+      (z (cdr L1) (cdr L2))
     )
   )
 )
